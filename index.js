@@ -7,7 +7,24 @@ const parseClassName = file => {
   return name;
 };
 
-const parseMethods = file => {};
+const parseMethods = file => {
+  // TODO: multi line methods
+  const methodRegex = /(public|private|protected) (static )?(\w*) (\w*)(?:\(((\w|\s|\,|\n)*)\))/g;
+  const methods = [];
+  let match;
+  while ((match = methodRegex.exec(file))) {
+    const [, visibility, modifier, returnType, name, rawArguments] = match;
+    methods.push({
+      public: visibility === "public",
+      static: Boolean(modifier),
+      returnType,
+      name,
+      args: rawArguments // TODO: improve
+    });
+  }
+
+  return methods;
+};
 
 const parse = file => {
   return {

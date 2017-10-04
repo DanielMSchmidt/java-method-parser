@@ -12,8 +12,32 @@ describe("objective-c-parser", () => {
       expect(javaMethodParser(basic).name).toBe("BasicName");
     });
 
-    it("should return three methods for basic example");
+    it("should return five methods for basic example", () => {
+      expect(javaMethodParser(basic).methods.length).toBe(7);
+    });
 
-    it("should be able to detect static methods");
+    it("should detect private and public methods", () => {
+      expect(javaMethodParser(basic).methods.map(x => x.public)).toEqual([
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        true
+      ]);
+    });
+
+    it("should be able to detect static methods", () => {
+      expect(javaMethodParser(basic).methods.map(x => x.static)).toEqual([
+        true,
+        true,
+        true,
+        true,
+        false,
+        true,
+        false
+      ]);
+    });
   });
 });

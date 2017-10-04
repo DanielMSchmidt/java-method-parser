@@ -46,7 +46,17 @@ public class BasicName {
     public static ViewAction tapAtLocation(final int x, final int y) {
         final int px = UiAutomatorHelper.convertDiptoPix(x);
         final int py = UiAutomatorHelper.convertDiptoPix(y);
-        CoordinatesProvider c = new CoordinatesProvider() {};
+        CoordinatesProvider c = new CoordinatesProvider() {
+            @Override
+            public float[] calculateCoordinates(View view) {
+                final int[] xy = new int[2];
+                view.getLocationOnScreen(xy);
+                final float fx = xy[0] + px;
+                final float fy = xy[1] + py;
+                float[] coordinates = {fx, fy};
+                return coordinates;
+            }
+        };
         return actionWithAssertions(new GeneralClickAction(
                 Tap.SINGLE, c, Press.FINGER, InputDevice.SOURCE_UNKNOWN, MotionEvent.BUTTON_PRIMARY));
     }
@@ -64,7 +74,59 @@ public class BasicName {
      * @return ViewAction
      */
     public static ViewAction scrollToEdge(final int edge) {
-        return actionWithAssertions(new ViewAction() {});
+        return actionWithAssertions(new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isAssignableFrom(View.class), isDisplayed());
+            }
+
+            @Override
+            public String getDescription() {
+                return "scrollToEdge";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                Class<?> recyclerViewClass = null;
+                try {
+                    recyclerViewClass = Class.forName(RecyclerViewScrollListener.CLASS_RECYCLERVIEW);
+                } catch (ClassNotFoundException e) {
+                    // ok
+                }
+                if (view instanceof AbsListView) {
+                    RNScrollListener l = new RNScrollListener((AbsListView) view);
+                    do {
+                        ScrollHelper.performOnce(uiController, view, edge);
+                    } while (l.didScroll());
+                    l.cleanup();
+                } else if (view instanceof ScrollView) {
+                    int prevScrollY = view.getScrollY();
+                    while (true) {
+                        ScrollHelper.performOnce(uiController, view, edge);
+                        int currentScrollY = view.getScrollY();
+                        if (currentScrollY == prevScrollY) break;
+                        prevScrollY = currentScrollY;
+                    }
+                } else if (view instanceof HorizontalScrollView) {
+                    int prevScrollX = view.getScrollX();
+                    while (true) {
+                        ScrollHelper.performOnce(uiController, view, edge);
+                        int currentScrollX = view.getScrollX();
+                        if (currentScrollX == prevScrollX) break;
+                        prevScrollX = currentScrollX;
+                    }
+                } else if (recyclerViewClass != null && recyclerViewClass.isInstance(view)) {
+                    RecyclerViewScrollListener l = new RecyclerViewScrollListener(view);
+                    do {
+                        ScrollHelper.performOnce(uiController, view, edge);
+                    } while (l.didScroll());
+                    l.cleanup();
+                } else {
+                    throw new RuntimeException(
+                            "Only descendants of AbsListView, ScrollView, HorizontalScrollView and RecyclerView are supported");
+                }
+            }
+        });
     }
 
     /**
@@ -81,7 +143,22 @@ public class BasicName {
      *
      */
     public static ViewAction scrollInDirection(final int direction, final double amountInDP) {
-        return actionWithAssertions(new ViewAction() {});
+        return actionWithAssertions(new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return allOf(isAssignableFrom(View.class), isDisplayed());
+            }
+
+            @Override
+            public String getDescription() {
+                return "scrollInDirection";
+            }
+
+            @Override
+            public void perform(UiController uiController, View view) {
+                ScrollHelper.perform(uiController, view, direction, amountInDP);
+            }
+        });
     }
 
     private final static float EDGE_FUZZ_FACTOR = 0.083f;
@@ -138,7 +215,15 @@ public class BasicName {
 
     private static CoordinatesProvider translate(final CoordinatesProvider coords,
                                                  final float dx, final float dy) {
-        return new CoordinatesProvider() {};
+        return new CoordinatesProvider() {
+            @Override
+            public float[] calculateCoordinates(View view) {
+                float xy[] = coords.calculateCoordinates(view);
+                xy[0] += dx * view.getWidth();
+                xy[1] += dy * view.getHeight();
+                return xy;
+            }
+        };
     }
 
 		public void memberMethod() {}
