@@ -1,0 +1,54 @@
+{
+  "name": "java-method-parser",
+  "version": "0.0.1",
+  "description": "A node utility to get the methods out of java files",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/DanielMSchmidt/java-method-parser.git"
+  },
+  "keywords": ["java", "parser", "methods"],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DanielMSchmidt/java-method-parser/issues"
+  },
+  "homepage": "https://github.com/DanielMSchmidt/java-method-parser#readme",
+  "scripts": {
+    "precommit": "lint-staged",
+    "test": "jest"
+  },
+  "lint-staged": {
+    "*.{js,json,css}": ["prettier --write", "git add"]
+  },
+  "author": {
+    "name": "Daniel Schmidt",
+    "email": "danielmschmidt92@gmail.com",
+    "url": "danielmschmidt.de"
+  },
+  "engines": {
+    "node": ">=4"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  },
+  "files": ["index.js", "README.md"],
+  "devDependencies": {
+    "coveralls": "^2.11.12",
+    "husky": "0.14.3",
+    "jest": "^20.0.4",
+    "lint-staged": "4.2.3",
+    "nyc": "^10.0.0",
+    "prettier": "1.7.2"
+  },
+  "nyc": {
+    "reporter": ["lcov", "text"]
+  }
+}
