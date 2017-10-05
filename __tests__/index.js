@@ -5,7 +5,7 @@ function loadFile(name) {
   return fs.readFileSync(`./exampleFiles/${name}.java`, "utf8");
 }
 
-describe("objective-c-parser", () => {
+describe("java-method-parser", () => {
   describe("basic example", () => {
     const basic = loadFile("basic");
     it("should return name of basic example", () => {
@@ -38,6 +38,23 @@ describe("objective-c-parser", () => {
         true,
         false
       ]);
+    });
+
+    it("should parse the arguments", () => {
+      const [firstMethod, secondMethod] = javaMethodParser(basic).methods;
+      expect(firstMethod.args.length).toBe(1);
+      expect(firstMethod.args[0].type).toBe("int");
+      expect(firstMethod.args[0].name).toBe("times");
+      expect(firstMethod.args[0].final).toBe(false);
+
+      expect(secondMethod.args.length).toBe(2);
+      expect(secondMethod.args[0].type).toBe("String");
+      expect(secondMethod.args[0].name).toBe("x");
+      expect(secondMethod.args[0].final).toBe(true);
+
+      expect(secondMethod.args[1].type).toBe("float");
+      expect(secondMethod.args[1].name).toBe("y");
+      expect(secondMethod.args[1].final).toBe(true);
     });
   });
 });

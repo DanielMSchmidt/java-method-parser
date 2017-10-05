@@ -43,12 +43,7 @@ public class BasicName {
         return actionWithAssertions(new GeneralClickAction(new MultiTap(times), GeneralLocation.CENTER, Press.FINGER, 0, 0));
     }
 
-    public static ViewAction tapAtLocation(final int x, final int y) {
-        final int px = UiAutomatorHelper.convertDiptoPix(x);
-        final int py = UiAutomatorHelper.convertDiptoPix(y);
-        CoordinatesProvider c = new CoordinatesProvider() {};
-        return actionWithAssertions(new GeneralClickAction(
-                Tap.SINGLE, c, Press.FINGER, InputDevice.SOURCE_UNKNOWN, MotionEvent.BUTTON_PRIMARY));
+    public static ViewAction tapAtLocation(final String x, final float y) {
     }
 
     /**
