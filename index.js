@@ -33,24 +33,72 @@ const transformArgument = rawArguments => {
   };
 };
 
+// Get the matching closing bracket after this point
+const getClosingBracketPosition = (file, startIndex) => {
+  let currentDepth = 1;
+  let currentIndex = startIndex;
+
+  while (currentDepth > 0) {
+    const nextOpeningIndex =
+      file.indexOf("{", currentIndex) !== -1
+        ? file.indexOf("{", currentIndex)
+        : Infinity;
+    const nextClosingIndex =
+      file.indexOf("}", currentIndex) !== -1
+        ? file.indexOf("}", currentIndex)
+        : Infinity;
+
+    // Opening bracket comes next
+    if (nextOpeningIndex < nextClosingIndex) {
+      currentDepth += 1;
+      currentIndex = nextOpeningIndex + 1;
+    }
+
+    // Closing bracket comes next
+    if (nextClosingIndex < nextOpeningIndex) {
+      currentDepth -= 1;
+      currentIndex = nextClosingIndex + 1;
+    }
+  }
+
+  return currentIndex;
+};
+
 const parseMethods = file => {
   // TODO: multi line methods
   const methodRegex = /(public|private|protected) (static )?(\w*) (\w*)(?:\(((\w|\s|\,|\n)*)\))/g;
   const methods = [];
   let match;
+
   while ((match = methodRegex.exec(file))) {
+    const start = file.indexOf("{", match.index);
+    const end = getClosingBracketPosition(file, start + 1);
+
     const [, visibility, modifier, returnType, name, rawArguments] = match;
 
     methods.push({
-      public: visibility === "public",
-      static: Boolean(modifier),
-      returnType,
-      name,
-      args: rawArguments.split(",").map(transformArgument)
+      start,
+      end,
+      content: {
+        public: visibility === "public",
+        static: Boolean(modifier),
+        returnType,
+        name,
+        args: rawArguments.split(",").map(transformArgument)
+      }
     });
   }
 
-  return methods;
+  return methods
+    .filter(
+      (filteredMethod, index, methods) =>
+        !methods.some(
+          comparingMethod =>
+            comparingMethod.start < filteredMethod.start &&
+            filteredMethod.start < comparingMethod.end
+        )
+    )
+    .map(({ content }) => content);
 };
 
 const parse = file => {

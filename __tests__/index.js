@@ -57,4 +57,12 @@ describe("java-method-parser", () => {
       expect(secondMethod.args[1].final).toBe(true);
     });
   });
+
+  describe("advanced example", () => {
+    const advanced = loadFile("advanced");
+
+    it("should ignore inner anonymous functions", () => {
+      expect(javaMethodParser(advanced).methods.length).toBe(7);
+    });
+  });
 });
