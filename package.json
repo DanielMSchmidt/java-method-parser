@@ -3,10 +3,7 @@
   "version": "0.3.0",
   "description": "A node utility to get the methods out of java files",
   "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/DanielMSchmidt/java-method-parser.git"
-  },
+  "repository": "danielmschmidt/java-method-parser",
   "keywords": ["java", "parser", "methods"],
   "license": "MIT",
   "bugs": {
