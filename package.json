@@ -7,7 +7,11 @@
     "type": "git",
     "url": "git+ssh://git@github.com/DanielMSchmidt/java-method-parser.git"
   },
-  "keywords": ["java", "parser", "methods"],
+  "keywords": [
+    "java",
+    "parser",
+    "methods"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/DanielMSchmidt/java-method-parser/issues"
@@ -19,7 +23,10 @@
     "fmt": "prettier --write **/*{.js,.json,.css}"
   },
   "lint-staged": {
-    "*.{js,json,css}": ["prettier --write", "git add"]
+    "*.{js,json,css}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "author": {
     "name": "Daniel Schmidt",
@@ -40,7 +47,10 @@
       }
     }
   },
-  "files": ["index.js", "README.md"],
+  "files": [
+    "index.js",
+    "README.md"
+  ],
   "devDependencies": {
     "coveralls": "^3.0.0",
     "husky": "0.14.3",
@@ -50,6 +60,9 @@
     "prettier": "1.7.4"
   },
   "nyc": {
-    "reporter": ["lcov", "text"]
+    "reporter": [
+      "lcov",
+      "text"
+    ]
   }
 }
