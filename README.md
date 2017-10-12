@@ -1,4 +1,4 @@
-# java-method-parser [![Build Status](https://travis-ci.org/DanielMSchmidt/java-method-parser.svg?branch=master)](https://travis-ci.org/DanielMSchmidt/java-method-parser) [![Coverage Status](https://coveralls.io/repos/github/DanielMSchmidt/java-method-parser/badge.svg?branch=master)](https://coveralls.io/github/DanielMSchmidt/java-method-parser?branch=master)
+# java-method-parser [![Build Status](https://travis-ci.org/DanielMSchmidt/java-method-parser.svg?branch=master)](https://travis-ci.org/DanielMSchmidt/java-method-parser) [![Coverage Status](https://coveralls.io/repos/github/DanielMSchmidt/java-method-parser/badge.svg?branch=master)](https://coveralls.io/github/DanielMSchmidt/java-method-parser?branch=master) [![BCH compliance](https://bettercodehub.com/edge/badge/DanielMSchmidt/java-method-parser?branch=master)](https://bettercodehub.com/)
 
 > Get an objective-c header file and translate it to equivalent javascript calls
 
