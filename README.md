@@ -2,24 +2,22 @@
 
 > Get an objective-c header file and translate it to equivalent javascript calls
 
-
 ## Install
 
 ```
 $ npm install java-method-parser
 ```
 
-
 ## Usage
 
 ```js
-const fs = require('fs');
-const javaMethodParser = require('java-method-parser');
-const content = fs.readFileSync('/path/to/java/Ponies.java')
+const fs = require("fs");
+const javaMethodParser = require("java-method-parser");
+const content = fs.readFileSync("/path/to/java/Ponies.java");
 
 const output = objectiveCParser(content);
 
-fs.writeFileSync('/path/to/project/ponies.json', output);
+fs.writeFileSync("/path/to/project/ponies.json", output);
 ```
 
 ## Example
@@ -38,7 +36,6 @@ public class BasicName {
     // This is for asserting invisibility
     public static ViewInteraction assertNotVisible(ViewInteraction i) {}
 }
-
 ```
 
 ```json
@@ -46,13 +43,16 @@ public class BasicName {
   "name": "BasicName",
   "methods": [
     {
-      "args": [{
-        "type": "ViewInteraction",
-        "name": "i"
-      }, {
-        "type": "Matcher<View>",
-        "name": "m"
-      }],
+      "args": [
+        {
+          "type": "ViewInteraction",
+          "name": "i"
+        },
+        {
+          "type": "Matcher<View>",
+          "name": "m"
+        }
+      ],
       "comment": "asserting a matcher",
       "name": "assertMatcher",
       "returnType": "ViewInteraction"
@@ -62,7 +62,7 @@ public class BasicName {
         {
           "type": "ViewInteraction",
           "name": "i"
-        },
+        }
       ],
       "comment": "This is for asserting invisibility",
       "name": "assertNotVisible",
