@@ -1,14 +1,10 @@
 {
   "name": "java-method-parser",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "A node utility to get the methods out of java files",
   "main": "index.js",
   "repository": "danielmschmidt/java-method-parser",
-  "keywords": [
-    "java",
-    "parser",
-    "methods"
-  ],
+  "keywords": ["java", "parser", "methods"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/DanielMSchmidt/java-method-parser/issues"
@@ -20,10 +16,7 @@
     "fmt": "prettier --write **/*.{js,json,css,md}"
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "author": {
     "name": "Daniel Schmidt",
@@ -44,10 +37,7 @@
       }
     }
   },
-  "files": [
-    "index.js",
-    "README.md"
-  ],
+  "files": ["index.js", "README.md"],
   "devDependencies": {
     "coveralls": "^3.0.0",
     "husky": "0.14.3",
@@ -57,9 +47,6 @@
     "prettier": "1.8.2"
   },
   "nyc": {
-    "reporter": [
-      "lcov",
-      "text"
-    ]
+    "reporter": ["lcov", "text"]
   }
 }
