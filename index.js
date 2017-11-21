@@ -1,5 +1,11 @@
 "use strict";
 
+const parsePackageName = file => {
+  const packageNameRegex = /^package (.*)\;/;
+  const [, pkg] = packageNameRegex.exec(file);
+  return pkg;
+};
+
 const parseClassName = file => {
   // TODO: add extends as edge case
   const classNameRegex = /public class (.*)\s\{/;
@@ -103,6 +109,7 @@ const parseMethods = file => {
 
 const parse = file => {
   return {
+    package: parsePackageName(file),
     name: parseClassName(file),
     methods: parseMethods(file)
   };

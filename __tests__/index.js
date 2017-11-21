@@ -12,6 +12,10 @@ describe("java-method-parser", () => {
       expect(javaMethodParser(basic).name).toBe("BasicName");
     });
 
+    it("should return the package name", () => {
+      expect(javaMethodParser(basic).package).toBe("com.wix.detox.espresso");
+    });
+
     it("should return five methods for basic example", () => {
       expect(javaMethodParser(basic).methods.length).toBe(7);
     });
