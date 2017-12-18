@@ -69,4 +69,18 @@ describe("java-method-parser", () => {
       expect(javaMethodParser(advanced).methods.length).toBe(7);
     });
   });
+
+  describe("advanced2 example", () => {
+    const advanced = loadFile("advanced2");
+
+    it("should allow comment in the beginning", () => {
+      expect(javaMethodParser(advanced).package).toBe(
+        "android.support.test.espresso.action"
+      );
+    });
+
+    it("should allow modifiers for class names", () => {
+      expect(javaMethodParser(advanced).name).toBe("ViewActions");
+    });
+  });
 });
