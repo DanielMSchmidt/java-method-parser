@@ -22,7 +22,6 @@ const transformArgument = rawArguments => {
 		return null;
 	}
 
-	// TODO: check for other modifiers like final
 	if (argumentParts[0] === "final") {
 		const [, type, name] = argumentParts;
 		return {
@@ -31,6 +30,15 @@ const transformArgument = rawArguments => {
 			name
 		};
 	}
+
+	if (argumentParts.length === 3) {
+		const [, type, name] = argumentParts;
+		return {
+			type,
+			name
+		};
+	}
+
 	const [type, name] = argumentParts;
 	return {
 		final: false,
@@ -72,7 +80,7 @@ const getClosingBracketPosition = (file, startIndex) => {
 
 const parseMethods = file => {
 	// TODO: multi line methods
-	const methodRegex = /(public|private|protected) (static )?(\w*) (\w*)(?:\(((\w|\s|\,|\n)*)\))/g;
+	const methodRegex = /(public|private|protected) (static )?(\w*) (\w*)(?:\(((\w|\s|\,|\@|\n)*)\))/g;
 	const methods = [];
 	let match;
 

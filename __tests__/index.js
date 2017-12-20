@@ -84,7 +84,7 @@ describe("java-method-parser", () => {
 		});
 
 		it("should allow modifiers for method args", () => {
-			expect(javaMethodParser(advanced).methods.length).toBe(24);
+			expect(javaMethodParser(advanced).methods.length).toBe(25);
 			expect(javaMethodParser(advanced).methods[3].args[0].type).toBe(
 				"ViewAction"
 			);
@@ -95,6 +95,14 @@ describe("java-method-parser", () => {
 
 		it("should allow methods without args", () => {
 			expect(javaMethodParser(advanced).methods[2].args.length).toBe(0);
+		});
+
+		it("replace text", () => {
+			const replaceText = javaMethodParser(advanced).methods.find(
+				m => m.name === "replaceText"
+			);
+			expect(replaceText.name).toBe("replaceText");
+			expect(replaceText.args[0].name).toBe("stringToBeSet");
 		});
 	});
 });
