@@ -105,4 +105,12 @@ describe("java-method-parser", () => {
 			expect(replaceText.args[0].name).toBe("stringToBeSet");
 		});
 	});
+
+	describe("advanced3 example", () => {
+		const advanced = loadFile("advanced2");
+
+		it("should have the right amount of methods", () => {
+			expect(javaMethodParser(advanced).methods.length).toBe(25);
+		});
+	});
 });
