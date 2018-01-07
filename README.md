@@ -40,36 +40,36 @@ public class BasicName {
 
 ```json
 {
-  "name": "BasicName",
-  "pcakage": "com.foo.bar",
-  "methods": [
-    {
-      "args": [
-        {
-          "type": "ViewInteraction",
-          "name": "i"
-        },
-        {
-          "type": "Matcher<View>",
-          "name": "m"
-        }
-      ],
-      "comment": "asserting a matcher",
-      "name": "assertMatcher",
-      "returnType": "ViewInteraction"
-    },
-    {
-      "args": [
-        {
-          "type": "ViewInteraction",
-          "name": "i"
-        }
-      ],
-      "comment": "This is for asserting invisibility",
-      "name": "assertNotVisible",
-      "returnType": "ViewInteraction"
-    }
-  ]
+	"name": "BasicName",
+	"pcakage": "com.foo.bar",
+	"methods": [
+		{
+			"args": [
+				{
+					"type": "ViewInteraction",
+					"name": "i"
+				},
+				{
+					"type": "Matcher<View>",
+					"name": "m"
+				}
+			],
+			"comment": "asserting a matcher",
+			"name": "assertMatcher",
+			"returnType": "ViewInteraction"
+		},
+		{
+			"args": [
+				{
+					"type": "ViewInteraction",
+					"name": "i"
+				}
+			],
+			"comment": "This is for asserting invisibility",
+			"name": "assertNotVisible",
+			"returnType": "ViewInteraction"
+		}
+	]
 }
 ```
 

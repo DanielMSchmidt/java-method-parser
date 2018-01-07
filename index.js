@@ -80,7 +80,7 @@ const getClosingBracketPosition = (file, startIndex) => {
 
 const parseMethods = file => {
 	// TODO: multi line methods
-	const methodRegex = /(public|private|protected) (static )?(\w*) (\w*)(?:\(((\w|\s|\,|\@|\n)*)\))/g;
+	const methodRegex = /(public|private|protected) (static )?((?:\w|\<|\>)*) (\w*)(?:\(((\w|\s|\,|\@|\n|\<|\>)*)\))/g;
 	const methods = [];
 	let match;
 

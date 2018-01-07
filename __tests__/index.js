@@ -84,7 +84,7 @@ describe("java-method-parser", () => {
 		});
 
 		it("should allow modifiers for method args", () => {
-			expect(javaMethodParser(advanced).methods.length).toBe(25);
+			expect(javaMethodParser(advanced).methods.length).toBe(29);
 			expect(javaMethodParser(advanced).methods[3].args[0].type).toBe(
 				"ViewAction"
 			);
@@ -106,11 +106,36 @@ describe("java-method-parser", () => {
 		});
 	});
 
-	describe("advanced3 example", () => {
-		const advanced = loadFile("advanced2");
+	describe("advanced3 example (with generics)", () => {
+		const advanced = loadFile("advanced3");
 
-		it("should have the right amount of methods", () => {
-			expect(javaMethodParser(advanced).methods.length).toBe(25);
+		it("should have the right methods", () => {
+			expect(javaMethodParser(advanced).methods.map(x => x.name)).toEqual(
+				expect.arrayContaining([
+					"matcherForText",
+					"matcherForContentDescription",
+					"matcherForTestId",
+					"matcherForAnd",
+					"matcherForOr",
+					"matcherForNot",
+					"matcherWithAncestor",
+					"matcherWithDescendant",
+					"matcherForClass",
+					"matcherForSufficientlyVisible",
+					"matcherForNotVisible",
+					"matcherForNotNull",
+					"matcherForNull",
+					"matcherForAtIndex",
+					"matcherForAnything"
+				])
+			);
+		});
+
+		it("should have correct arguments with generics", () => {
+			const m = javaMethodParser(advanced).methods[3];
+			expect(m.name).toBe("matcherForAnd");
+			expect(m.args[0].name).toBe("m1");
+			expect(m.args[0].type).toBe("Matcher<View>");
 		});
 	});
 });
