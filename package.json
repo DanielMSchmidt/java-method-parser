@@ -27,15 +27,7 @@
 		"node": ">=4"
 	},
 	"jest": {
-		"collectCoverage": true,
-		"coverageThreshold": {
-			"global": {
-				"statements": 100,
-				"branches": 90,
-				"functions": 100,
-				"lines": 100
-			}
-		}
+		"collectCoverage": true
 	},
 	"files": ["index.js", "README.md"],
 	"devDependencies": {
@@ -48,5 +40,9 @@
 	},
 	"nyc": {
 		"reporter": ["lcov", "text"]
+	},
+	"dependencies": {
+		"npmlog": "^4.1.2",
+		"pegjs": "^0.10.0"
 	}
 }

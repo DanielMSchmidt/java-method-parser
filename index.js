@@ -1,128 +1,97 @@
 "use strict";
+const fs = require("fs");
+const log = require("npmlog");
+const peg = require("pegjs");
 
-const parsePackageName = file => {
-	const packageNameRegex = /package (.*)\;/;
-	const [, pkg] = packageNameRegex.exec(file);
-	return pkg;
-};
+log.level = process.env.DEBUG ? "verbose" : "warn";
 
-const parseClassName = file => {
-	// TODO: add extends as edge case
-	const classNameRegex = /public (?:final |static | )*class (.*)\s\{/;
-	const [, name] = classNameRegex.exec(file);
-	return name;
-};
+log.info("init", "Loading Grammar");
+const grammar = fs.readFileSync("./grammar/java-1.7.pegjs", "utf-8");
+log.info("init", "Generating Parser");
+const parser = peg.generate(grammar);
+log.info("init", "Parser generated");
 
-const argumentRegex = /(final)? (\w*) (\w*)/;
-const transformArgument = rawArguments => {
-	const argumentParts = rawArguments
-		.split(" ")
-		.filter(part => part && part !== "\n");
-	if (!argumentParts.length) {
-		return null;
+function getFullyQualifiedName(ast) {
+	if (!ast.qualifier) {
+		return ast.identifier;
 	}
 
-	if (argumentParts[0] === "final") {
-		const [, type, name] = argumentParts;
-		return {
-			final: true,
-			type,
-			name
-		};
+	return getFullyQualifiedName(ast.qualifier) + "." + ast.name.identifier;
+}
+
+function parsePackageName(ast) {
+	return getFullyQualifiedName(ast.package.name);
+}
+
+function parseClassName(ast) {
+	if (ast.types.length > 1) {
+		log.warn("classname", "unclear which type to take");
 	}
 
-	if (argumentParts.length === 3) {
-		const [, type, name] = argumentParts;
-		return {
-			type,
-			name
-		};
-	}
+	return ast.types[0].name.identifier;
+}
 
-	const [type, name] = argumentParts;
+function getReturnType(ast) {
+	return ast.returnType2.name
+		? ast.returnType2.name.identifier
+		: ast.returnType2.primitiveTypeCode;
+}
+
+function hasModifier(ast, name) {
+	return Boolean(ast.modifiers.find(modifier => modifier.keyword === name));
+}
+
+function getArgumentType(ast) {
+	switch (ast.node) {
+		case "SimpleType":
+			return ast.name.identifier;
+		case "PrimitiveType":
+			return ast.primitiveTypeCode;
+		case "ParameterizedType":
+			const baseType = ast.type.name.identifier;
+			const typeArgs = ast.typeArguments.map(arg => getArgumentType(arg));
+
+			return `${baseType}<${typeArgs.join(",")}>`;
+		default:
+			throw new Error("Unknown type :" + ast.node);
+	}
+}
+
+function getArgument(ast) {
 	return {
-		final: false,
-		type,
-		name
+		name: ast.name.identifier,
+		type: getArgumentType(ast.type),
+		static: hasModifier(ast, "static"),
+		final: hasModifier(ast, "final")
 	};
-};
+}
 
-// Get the matching closing bracket after this point
-const getClosingBracketPosition = (file, startIndex) => {
-	let currentDepth = 1;
-	let currentIndex = startIndex;
-
-	while (currentDepth > 0) {
-		const nextOpeningIndex =
-			file.indexOf("{", currentIndex) !== -1
-				? file.indexOf("{", currentIndex)
-				: Infinity;
-		const nextClosingIndex =
-			file.indexOf("}", currentIndex) !== -1
-				? file.indexOf("}", currentIndex)
-				: Infinity;
-
-		// Opening bracket comes next
-		if (nextOpeningIndex < nextClosingIndex) {
-			currentDepth += 1;
-			currentIndex = nextOpeningIndex + 1;
-		}
-
-		// Closing bracket comes next
-		if (nextClosingIndex < nextOpeningIndex) {
-			currentDepth -= 1;
-			currentIndex = nextClosingIndex + 1;
-		}
+function parseMethods(ast) {
+	if (ast.types.length > 1) {
+		log.warn("methods", "unclear which type to take");
 	}
 
-	return currentIndex;
-};
-
-const parseMethods = file => {
-	// TODO: multi line methods
-	const methodRegex = /(public|private|protected) (static )?((?:\w|\<|\>)*) (\w*)(?:\(((\w|\s|\,|\@|\n|\<|\>)*)\))/g;
-	const methods = [];
-	let match;
-
-	while ((match = methodRegex.exec(file))) {
-		const start = file.indexOf("{", match.index);
-		const end = getClosingBracketPosition(file, start + 1);
-
-		const [, visibility, modifier, returnType, name, rawArguments] = match;
-
-		methods.push({
-			start,
-			end,
-			content: {
-				public: visibility === "public",
-				static: Boolean(modifier),
-				returnType,
-				name,
-				args: rawArguments
-					.split(",")
-					.map(transformArgument)
-					.filter(Boolean)
-			}
-		});
-	}
-
-	return methods
-		.filter(
-			(filteredMethod, index, methods) =>
-				!methods.some(
-					comparingMethod =>
-						comparingMethod.start < filteredMethod.start &&
-						filteredMethod.start < comparingMethod.end
-				)
-		)
-		.map(({ content }) => content);
-};
+	return ast.types[0].bodyDeclarations
+		.filter(method => method.node === "MethodDeclaration")
+		.filter(method => method.constructor === false)
+		.map(method => ({
+			name: method.name.identifier,
+			static: hasModifier(method, "static"),
+			public: hasModifier(method, "public"),
+			returnType: getReturnType(method),
+			args: method.parameters.map(getArgument)
+		}));
+}
 
 const parse = file => {
+	log.info("p", "parsing");
+	const ast = parser.parse(file);
+	log.info("p", "parsed");
+
 	return {
-		package: parsePackageName(file),
-		name: parseClassName(file),
-		methods: parseMethods(file)
+		package: parsePackageName(ast),
+		name: parseClassName(ast),
+		methods: parseMethods(ast)
 	};
 };
 

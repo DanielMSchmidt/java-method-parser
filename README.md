@@ -41,7 +41,7 @@ public class BasicName {
 ```json
 {
 	"name": "BasicName",
-	"pcakage": "com.foo.bar",
+	"package": "com.foo.bar",
 	"methods": [
 		{
 			"args": [
