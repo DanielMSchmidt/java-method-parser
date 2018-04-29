@@ -1,12 +1,16 @@
 "use strict";
 const fs = require("fs");
+const path = require("path");
 const log = require("npmlog");
 const peg = require("pegjs");
 
 log.level = process.env.DEBUG ? "verbose" : "warn";
 
 log.info("init", "Loading Grammar");
-const grammar = fs.readFileSync("./grammar/java-1.7.pegjs", "utf-8");
+const grammar = fs.readFileSync(
+	path.join(__dirname, "./grammar/java-1.7.pegjs"),
+	"utf-8"
+);
 log.info("init", "Generating Parser");
 const parser = peg.generate(grammar);
 log.info("init", "Parser generated");

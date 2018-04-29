@@ -21,7 +21,7 @@
 	"author": {
 		"name": "Daniel Schmidt",
 		"email": "danielmschmidt92@gmail.com",
-		"url": "danielmschmidt.de"
+		"url": "http://danielmschmidt.de"
 	},
 	"engines": {
 		"node": ">=4"
@@ -29,7 +29,7 @@
 	"jest": {
 		"collectCoverage": true
 	},
-	"files": ["index.js", "README.md"],
+	"files": ["index.js", "README.md", "grammar/java-1.7.pegjs"],
 	"devDependencies": {
 		"coveralls": "^3.0.0",
 		"husky": "0.14.3",
