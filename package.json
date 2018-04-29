@@ -1,6 +1,6 @@
 {
 	"name": "java-method-parser",
-	"version": "1.0.0-0",
+	"version": "1.0.0-1",
 	"description": "A node utility to get the methods out of java files",
 	"main": "index.js",
 	"repository": "danielmschmidt/java-method-parser",
