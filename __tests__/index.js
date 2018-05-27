@@ -138,4 +138,12 @@ describe("java-method-parser", () => {
 			expect(m.args[0].type).toBe("Matcher<View>");
 		});
 	});
+
+	describe("class in comment", () => {
+		const advanced = loadFile("classInComment");
+
+		it("should detect the right class", () => {
+			expect(javaMethodParser(advanced).name).toBe("Detox");
+		});
+	});
 });

@@ -6,10 +6,17 @@ const parsePackageName = file => {
 	return pkg;
 };
 
+const removeComments = file => {
+	const commentRegex = /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm;
+	return file.replace(commentRegex, "");
+};
+
 const parseClassName = file => {
 	// TODO: add extends as edge case
+	const fileWithoutComments = removeComments(file);
+
 	const classNameRegex = /public (?:final |static | )*class (.*)\s\{/;
-	const [, name] = classNameRegex.exec(file);
+	const [, name] = classNameRegex.exec(fileWithoutComments);
 	return name;
 };
 
