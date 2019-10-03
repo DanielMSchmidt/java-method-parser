@@ -62,6 +62,24 @@ describe("java-method-parser", () => {
 		});
 	});
 
+	describe("generics example", () => {
+		const generics = loadFile("generics");
+
+		it("should handle complex generic arguments", () => {
+			expect(javaMethodParser(generics).methods).toHaveLength(1);
+
+			const [method] = javaMethodParser(generics).methods;
+
+			expect(method.args).toHaveLength(3);
+			expect(method.args[0].name).toBe("options");
+			expect(method.args[0].type).toBe("HashMap<T2, T>");
+			expect(method.args[1].name).toBe("key");
+			expect(method.args[1].type).toBe("String");
+			expect(method.args[2].name).toBe("instance");
+			expect(method.args[2].type).toBe("GenericClass<T, T1, T2>");
+		});
+	});
+
 	describe("advanced example", () => {
 		const advanced = loadFile("advanced");
 
