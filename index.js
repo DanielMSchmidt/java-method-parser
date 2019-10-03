@@ -23,8 +23,10 @@ const parseClassName = file => {
 const argumentRegex = /(final)? (\w*) (\w*)/;
 const transformArgument = rawArguments => {
 	const argumentParts = rawArguments
-		.split(" ")
-		.filter(part => part && part !== "\n");
+		.split(/ (?![^<]*>)/)
+		.map(p => p && p.trim())
+		.filter(Boolean);
+
 	if (!argumentParts.length) {
 		return null;
 	}
@@ -106,7 +108,7 @@ const parseMethods = file => {
 				returnType,
 				name,
 				args: rawArguments
-					.split(",")
+					.split(/,(?![^<]*>)/)
 					.map(transformArgument)
 					.filter(Boolean)
 			}
