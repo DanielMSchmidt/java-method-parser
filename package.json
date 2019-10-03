@@ -15,7 +15,6 @@
 	},
 	"homepage": "https://github.com/DanielMSchmidt/java-method-parser#readme",
 	"scripts": {
-		"precommit": "lint-staged",
 		"test": "jest",
 		"fmt": "prettier --write **/*.{js,css,md}"
 	},
@@ -49,17 +48,22 @@
 		"README.md"
 	],
 	"devDependencies": {
-		"coveralls": "3.0.5",
-		"husky": "3.0.0",
-		"jest": "24.8.0",
-		"lint-staged": "9.2.0",
-		"nyc": "14.1.1",
-		"prettier": "1.18.2"
+		"coveralls": "~3.0.6",
+		"husky": "~3.0.8",
+		"jest": "~24.9.0",
+		"lint-staged": "~9.4.1",
+		"nyc": "~14.1.1",
+		"prettier": "~1.18.2"
 	},
 	"nyc": {
 		"reporter": [
 			"lcov",
 			"text"
 		]
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
 	}
 }
