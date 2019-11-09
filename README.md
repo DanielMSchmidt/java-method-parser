@@ -15,7 +15,7 @@ const fs = require("fs");
 const javaMethodParser = require("java-method-parser");
 const content = fs.readFileSync("/path/to/java/Ponies.java");
 
-const output = objectiveCParser(content);
+const output = javaMethodParser(content);
 
 fs.writeFileSync("/path/to/project/ponies.json", output);
 ```
